@@ -1,0 +1,17 @@
+Descripción:
+MIMIC-III (Medical Information Mart for Intensive Care III): Es una base de datos abierta que contiene información desidentificada de pacientes ingresados en unidades de cuidados intensivos (UCI).
+
+El dataset se compone de múltiples tablas que registran la admisión, la estadía junto con sus diagnosticos del paciente en el hospital.
+Variables Principales (Tablas usadas del dataset):
+
+    PATIENTS: Contiene el subject_id (ID único), género y fecha de nacimiento/muerte.
+
+    ADMISSIONS: Registra cada estancia hospitalaria. Incluye el tipo de admisión, diagnóstico inicial y si el paciente falleció en el hospital.
+
+    ICUSTAYS: Detalles específicos de la estancia en la UCI, como el LOS (Length of Stay - duración en días).
+
+Variable a Predecir (Target):
+
+    Para Clasificación: EXPIRE_FLAG. Indica si el paciente falleció (1) o sobrevivió (0). Es un problema de clasificación binaria para predecir mortalidad hospitalaria.
+
+    Para Regresión: duracion_horas (o LOS). Predicción del tiempo de estancia. Es un valor continuo.

@@ -1,0 +1,76 @@
+## Descripción del Dataset
+
+El dataset utilizado es el **OPPORTUNITY Activity Recognition Dataset**, 
+desarrollado por investigadores del ETH Zurich. Fue creado instrumentando 
+una cocina de laboratorio con 72 sensores distribuidos en el cuerpo de 
+4 sujetos y en los objetos del entorno. Los sujetos realizaron actividades 
+cotidianas de la mañana como preparar café, hacer un sándwich y limpiar 
+la cocina, mientras los sensores registraban sus movimientos cada 33 
+milisegundos.
+
+El dataset completo contiene 869,387 lecturas y 250 columnas. Cada fila 
+representa un instante de tiempo con las lecturas simultáneas de todos 
+los sensores activos.
+
+## Variable objetivo: HL_Activity
+
+Se eligió **HL_Activity** (High Level Activity) como variable a predecir 
+porque representa la actividad general que realiza la persona en ese 
+momento, lo cual tiene aplicaciones directas en sistemas de casa 
+inteligente y asistentes del hogar. A diferencia de otras etiquetas del 
+dataset que describen movimientos específicos de brazos u objetos 
+tocados, HL_Activity describe la rutina completa — lo que la hace más 
+interpretable y útil para aplicaciones reales.
+
+Las 5 clases a predecir son:
+
+| Clase | Código original | Significado |
+|---|---|---|
+| 0 | 101 | **Relaxing** — la persona está descansando sin realizar ninguna tarea específica |
+| 1 | 102 | **Coffee time** — está preparando o tomando café, interactuando con la cafetera, taza y leche |
+| 2 | 103 | **Early morning** — rutina de llegada a la cocina, ubicándose y preparándose para empezar |
+| 3 | 104 | **Cleanup** — limpiando la cocina, recogiendo platos y cerrando cajones |
+| 4 | 105 | **Sandwich time** — preparando un sándwich, tomando pan, cortando salami y untando queso |
+
+## Sensores utilizados como features
+
+El dataset cuenta con 242 columnas de sensores distribuidos en tres grupos:
+sensores corporales, sensores en objetos de cocina y sensores del ambiente.
+Para este modelo se utilizaron todas las columnas de sensores (1–242) como 
+features de entrada.
+
+A continuación se describen algunos de los sensores mostrados en la muestra 
+del dataset:
+
+- **BACK_acc_X / Y / Z**: Acelerómetro ubicado en la espalda del sujeto. 
+  Mide la aceleración en los tres ejes espaciales en unidades de mili-g 
+  (milésimas de la gravedad). Permite detectar si la persona está erguida, 
+  inclinada o en movimiento.
+
+- **HIP_acc_X / Y / Z**: Acelerómetro en la cadera. Al estar en el centro 
+  de masa del cuerpo, es muy sensible al tipo de locomoción — caminar, 
+  sentarse o estar de pie generan patrones distintos en este sensor.
+
+- **IMU_BACK_acc_X / Y / Z**: Unidad de Medición Inercial (IMU) en la 
+  espalda. A diferencia del acelerómetro simple, la IMU combina 
+  acelerómetro, giroscopio y magnetómetro, lo que permite medir no solo 
+  la aceleración sino también la orientación y rotación del tronco en 
+  el espacio.
+
+## ¿Cómo se mide la actividad a través de sensores?
+
+Cada actividad genera patrones únicos en las lecturas de los sensores. 
+Por ejemplo:
+
+- Durante **Relaxing**, los sensores corporales muestran valores estables 
+  y bajos porque la persona está quieta.
+- Durante **Coffee time**, los sensores de la muñeca y brazo derecho 
+  muestran movimientos repetitivos de alcanzar y verter, y el sensor 
+  de la taza registra aceleración cuando es tomada.
+- Durante **Sandwich time**, los sensores del cuchillo y del pan registran 
+  movimientos de corte, mientras los sensores de la mano muestran 
+  patrones de agarre y extensión.
+
+El modelo de regresión logística One-vs-All aprende estos patrones 
+numéricos para cada clase y los usa para predecir qué actividad está 
+realizando la persona en un nuevo instante de tiempo.

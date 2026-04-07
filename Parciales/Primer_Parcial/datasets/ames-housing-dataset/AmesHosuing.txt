@@ -1,0 +1,40 @@
+Descripción del Dataset: Ames Housing
+
+El dataset Ames Housing fue compilado por Dean De Cock para su uso en la educación de la ciencia de datos. Es una alternativa moderna y mucho más detallada al clásico dataset de "Boston Housing".
+
+Contiene información exhaustiva sobre la venta de propiedades residenciales individuales en Ames, Iowa, entre los años 2006 y 2010. A diferencia de otros datasets de vivienda, este destaca por tener una enorme cantidad de variables (80+) que influyen en el valor de una casa, desde la calidad del sótano hasta el tipo de calle.
+
+Dimensiones del ds:
+
+    Filas: 2,930 registros (instancias de ventas de casas).
+
+    Columnas: 82 variables en total (81 características + 1 variable objetivo).
+
+Columnas Clave.-
+Columnas Numéricas:
+
+Lot Area: Tamaño del terreno en pies cuadrados. Es una variable crítica ya que, por lo general, a mayor terreno, mayor valor.
+
+Gr Liv Area (Above Grade Living Area): Pies cuadrados de superficie habitable sobre el nivel del suelo. Es uno de los predictores más fuertes del precio final.
+
+Total Bsmt SF: Superficie total del sótano. En zonas como Iowa, el estado y tamaño del sótano influyen mucho en el mercado.
+
+Year Built: Año de construcción original. Permite al modelo entender la depreciación o el valor histórico.
+
+Columnas Categóricas (Clasificaciones):
+
+MS Zoning: La clasificación de la zona donde está la casa.	RL (Residencial Baja Densidad), RM (Media Densidad), C (Comercial).
+Street:	El tipo de camino de acceso a la propiedad.	Pave (Pavimentado), Grvl (Grava/Tierra).
+Alley: Tipo de acceso por callejón (si tiene).	Pave, Grvl, None (No tiene callejón).
+Lot Shape :La forma general de la propiedad (qué tan "cuadrado" es el terreno).	Reg (Regular/Rectángulo), IR1 (Ligeramente irregular), IR2 (Irregular).
+Land Contour:La planicidad o inclinación del terreno.	Lvl (Nivelado/Plano), Bnk (Banco/Pendiente), HLS (Ladera).
+Utilities: Tipo de servicios públicos disponibles.	AllPub (Todos los servicios), NoSeWa (Solo Electricidad y Gas).
+
+
+Variable Objetivo: SalePrice
+
+En este caso, hemos definido SalePrice como nuestra variable objetivo (o target) por que estamos ante un problema de Regresión. Queremos predecir un valor numérico continuo (el precio en dólares) basado en las características de la casa.
+
+Valor de Negocio: Para un tasador, un comprador o una inmobiliaria, la predicción más valiosa es el precio de mercado. SalePrice resume el impacto combinado de todas las demás variables (ubicación, tamaño, calidad).
+
+Análisis de Error: Al usar PyTorch, el objetivo es minimizar la diferencia entre el SalePrice real y el predicho (usando funciones de pérdida como el MSE - Error Cuadrático Medio), permitiendo que la red neuronal aprenda qué tan "cara" o "barata" es una combinación específica de características.

@@ -1,0 +1,20 @@
+Bike Sharing Demand
+¿De qué trata?
+Es un dataset de alquiler de bicicletas por hora del sistema Capital Bikeshare en Washington D.C., entre 2011 y 2012. Cada fila representa una hora específica con sus condiciones climáticas y el número de bicicletas alquiladas en esa hora.
+
+Columnas:
+datetime → fecha y hora del registro (ej: 2011-01-01 00:00:00). Es texto, se excluye o se descompone en hora, día, mes.
+season → estación del año codificada como número: 1=primavera, 2=verano, 3=otoño, 4=invierno.
+holiday → si el día es feriado (1) o no (0).
+workingday → si el día es laboral, es decir ni fin de semana ni feriado (1) o no (0).
+weather → condición climática codificada: 1=despejado, 2=nublado/neblina, 3=lluvia/nieve leve, 4=lluvia/nieve fuerte.
+temp → temperatura real en grados Celsius.
+atemp → temperatura "sensación térmica" en Celsius. Muy correlacionada con temp, generalmente se excluye una de las dos.
+humidity → humedad relativa en porcentaje (0-100).
+windspeed → velocidad del viento en mph.
+casual → número de alquileres por usuarios no registrados. ⚠️ Se debe excluir porque es parte directa de count.
+registered → número de alquileres por usuarios registrados. ⚠️ Se debe excluir también por la misma razón.
+count → total de bicicletas alquiladas = casual + registered. Esta es tu variable a predecir (y).
+
+
+Data leakage - fuga de datos, se refiere al uso de valores que en este caso, el modelo ml no debería contar al momento de realizar una predicción.

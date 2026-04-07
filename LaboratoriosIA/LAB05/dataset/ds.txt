@@ -1,0 +1,60 @@
+# Dataset: Opportunity Activity Recognition
+
+## ¿De dónde vienen los datos?
+El dataset Opportunity fue recolectado en el laboratorio de la 
+Universidad de Ginebra (Suiza) como parte del proyecto europeo 
+OPPORTUNITY. Los participantes fueron 4 sujetos (S1, S2, S3, S4) 
+realizando actividades cotidianas en una cocina instrumentada con 
+sensores. Cada sujeto realizó 5 sesiones ADL (Activities of Daily 
+Living) y 1 sesión Drill (actividades controladas y repetidas).
+
+## ¿Qué miden los sensores?
+El cuerpo de cada sujeto tenía sensores en distintas partes:
+- Acelerómetros en brazos, piernas, muñecas, espalda y cadera
+  → miden la aceleración del movimiento en los ejes X, Y, Z
+- IMU (Inertial Measurement Units) en espalda, brazos y piernas
+  → combinan acelerómetro + giroscopio + magnetómetro
+  → el giroscopio mide velocidad angular (rotación)
+  → el magnetómetro mide orientación respecto al campo magnético
+- Sensores en objetos de la cocina (taza, cuchillo, pan, etc.)
+  → detectan si el objeto está siendo usado
+- Reed switches en cajones, heladera, lavavajillas
+  → detectan si están abiertos o cerrados (0 o 1)
+- Tags de localización
+  → miden la posición X, Y, Z del sujeto en la cocina
+
+## Dimensiones del dataset
+- 24 archivos (5 ADL + 1 Drill por cada uno de los 4 sujetos)
+- 243 columnas en total:
+  - Columna 0   → timestamp (se elimina)
+  - Columnas 1–242 → sensores (las features X)
+  - Columna 244 → HL_Activity (la variable a predecir y)
+  - Columnas 244–249 → otras etiquetas (se eliminan)
+
+## ¿Qué se predice?
+La columna HL_Activity representa la actividad de alto nivel 
+que está realizando el sujeto en ese momento:
+
+| Clase | Código | Actividad |
+|---|---|---|
+| 0 | 101 | Relaxing — descansando |
+| 1 | 102 | Coffee time — preparando café |
+| 2 | 103 | Early morning — llegando a la cocina |
+| 3 | 104 | Cleanup — limpiando la cocina |
+| 4 | 105 | Sandwich time — preparando sándwich |
+
+## ¿Por qué predecir esto?
+Conocer la actividad de una persona en tiempo real tiene 
+aplicaciones en:
+- Monitoreo de personas mayores o con discapacidades
+- Sistemas de asistencia inteligente en el hogar
+- Rehabilitación médica — verificar que el paciente realiza 
+  sus rutinas correctamente
+
+## ¿Se usan todas las columnas de sensores?
+Sí — se usan las 242 columnas de sensores (columnas 1 a 242).
+Se excluyen:
+- Columna 0  → timestamp, no aporta información de movimiento
+- Columna 243 → Locomotion, es otra etiqueta no la que predecimos
+- Columnas 245–249 → otras etiquetas de bajo nivel que describen
+  acciones más específicas — no son la variable objetivo
