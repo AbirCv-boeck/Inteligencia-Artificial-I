@@ -1,0 +1,333 @@
+# Proyecto de Aprendizaje por Refuerzo: Ascensor Inteligente
+
+## 1. Objetivo del proyecto
+
+El objetivo del proyecto es desarrollar un agente inteligente capaz de controlar un ascensor utilizando Aprendizaje por Refuerzo (Reinforcement Learning).
+
+El agente debe aprender de forma autónoma cómo mover el ascensor para transportar pasajeros entre distintos pisos minimizando los tiempos de espera y maximizando la cantidad de pasajeros atendidos.
+
+Para ello se utilizó el algoritmo Q-Learning, que permite aprender una política óptima mediante prueba y error, sin necesidad de conocer previamente la solución.
+
+---
+
+# 2. Componentes del Aprendizaje por Refuerzo
+
+Todo problema de Aprendizaje por Refuerzo está compuesto por:
+
+* Agente
+* Entorno
+* Estados
+* Acciones
+* Recompensas
+* Política
+
+En este proyecto cada componente fue definido de la siguiente manera.
+
+---
+
+## 3. Agente
+
+El agente es el controlador inteligente del ascensor.
+
+Su función es observar el estado actual del entorno y decidir qué acción ejecutar.
+
+El agente utiliza Q-Learning para aprender qué acciones generan mejores recompensas a largo plazo.
+
+El conocimiento aprendido se almacena en una estructura llamada Q-Table.
+
+Cada entrada de la tabla representa:
+
+Q(estado, acción)
+
+Es decir, el valor esperado de ejecutar una acción determinada en un estado específico.
+
+---
+
+## 4. Entorno
+
+El entorno representa el edificio y los pasajeros.
+
+Está implementado en la clase:
+
+AscensorEnv
+
+El entorno es responsable de:
+
+* Mantener la posición actual del ascensor.
+* Generar pasajeros aleatoriamente.
+* Registrar pasajeros esperando.
+* Registrar pasajeros dentro del ascensor.
+* Calcular recompensas.
+* Actualizar el estado del sistema.
+* Indicar cuándo termina un episodio.
+
+Cada vez que el agente realiza una acción, el entorno responde con:
+
+* Nuevo estado.
+* Recompensa.
+* Indicador de fin de episodio.
+* Información estadística.
+
+---
+
+## 5. Espacio de acciones
+
+El agente dispone de tres acciones posibles:
+
+### Acción 0: SUBIR
+
+Mueve el ascensor un piso hacia arriba.
+
+### Acción 1: BAJAR
+
+Mueve el ascensor un piso hacia abajo.
+
+### Acción 2: ABRIR
+
+Abre las puertas.
+
+Al abrir las puertas ocurren dos procesos:
+
+1. Los pasajeros cuyo destino es el piso actual abandonan el ascensor.
+2. Los pasajeros que esperan en ese piso ingresan al ascensor.
+
+---
+
+## 6. Diseño del estado
+
+Inicialmente se utilizó un estado muy grande que almacenaba:
+
+* Piso actual.
+* Cantidad de pasajeros esperando por piso.
+* Cantidad de pasajeros dentro por destino.
+
+Este enfoque generó un espacio de estados enorme.
+
+Como consecuencia:
+
+* La Q-Table crecía excesivamente.
+* El agente visitaba muchos estados una sola vez.
+* El aprendizaje era lento.
+* El ascensor podía quedar atrapado en comportamientos incorrectos.
+
+Posteriormente se simplificó el estado.
+
+La razón fue reducir la explosión combinatoria de estados y facilitar el aprendizaje.
+
+Esta simplificación permitió que el agente generalizara mejor y aprendiera políticas más estables.
+
+---
+
+## 7. Recompensas
+
+El sistema de recompensas guía el aprendizaje del agente.
+
+### Penalización por paso
+
+Cada acción tiene un costo:
+
+Reward = -1
+
+Esto evita movimientos innecesarios.
+
+---
+
+### Recompensa por recoger pasajeros
+
+Cuando el ascensor recoge un pasajero:
+
+Reward += 10
+
+El agente aprende que recoger pasajeros es beneficioso.
+
+---
+
+### Recompensa por entregar pasajeros
+
+Cuando un pasajero llega a su destino:
+
+Reward += 25
+
+Esta es la recompensa principal del sistema.
+
+El objetivo final del agente es maximizar este valor.
+
+---
+
+### Penalización por movimientos inválidos
+
+Intentar subir desde el último piso:
+
+Reward -= 10
+
+Intentar bajar desde el primer piso:
+
+Reward -= 10
+
+Esto evita acciones imposibles.
+
+---
+
+### Penalización por espera excesiva
+
+Si un pasajero espera demasiado tiempo:
+
+Reward -= 5
+
+Esto incentiva al agente a atender rápidamente las solicitudes.
+
+---
+
+## 8. Política de aprendizaje
+
+La política utilizada es ε-Greedy.
+
+Durante el entrenamiento:
+
+Con probabilidad ε:
+
+* Se explora una acción aleatoria.
+
+Con probabilidad (1 - ε):
+
+* Se selecciona la acción con mayor valor Q.
+
+Esto permite equilibrar:
+
+Exploración:
+Probar acciones nuevas.
+
+Explotación:
+Utilizar el conocimiento aprendido.
+
+---
+
+## 9. Decaimiento de epsilon
+
+Inicialmente:
+
+ε = 1
+
+El agente explora completamente.
+
+Con el paso de los episodios:
+
+ε disminuye gradualmente.
+
+Finalmente:
+
+ε ≈ 0.01
+
+En esta etapa el agente utiliza principalmente la política aprendida.
+
+---
+
+## 10. Valores iniciales optimistas
+
+Para mejorar la exploración se utilizaron valores iniciales optimistas.
+
+Cuando un estado nunca ha sido visitado:
+
+Q = 1.0
+
+en lugar de:
+
+Q = 0.0
+
+Esto evita favorecer una acción específica cuando todas son desconocidas.
+
+Además reduce la posibilidad de bloqueos por falta de exploración.
+
+---
+
+## 11. Algoritmo Q-Learning
+
+La actualización de la tabla Q sigue la ecuación:
+
+Q(s,a) = Q(s,a) + α [ r + γ max Q(s',a') - Q(s,a) ]
+
+Donde:
+
+α = tasa de aprendizaje.
+
+γ = factor de descuento.
+
+r = recompensa obtenida.
+
+s' = siguiente estado.
+
+Esta ecuación permite aproximar progresivamente el valor real de cada acción.
+
+---
+
+## 12. Entrenamiento
+
+El entrenamiento se realizó durante múltiples episodios.
+
+En cada episodio:
+
+1. Se reinicia el entorno.
+2. El agente interactúa con el entorno.
+3. Se actualiza la Q-Table.
+4. Se almacenan métricas.
+5. Se reduce epsilon.
+
+Al finalizar se guarda:
+
+* metricas.pkl
+* qtable.pkl
+
+---
+
+## 13. Métricas analizadas
+
+### Reward acumulado
+
+Indica qué tan buena es la política aprendida.
+
+Una tendencia ascendente indica aprendizaje.
+
+---
+
+### Pasajeros transportados
+
+Mide la productividad del sistema.
+
+Mientras más pasajeros transporta el ascensor, mejor es el desempeño.
+
+---
+
+### Tiempo promedio de espera
+
+Mide la calidad del servicio.
+
+El objetivo es reducir esta métrica.
+
+---
+
+## 14. Visualización
+
+Se desarrolló una interfaz en Pygame.
+
+Esta permite observar:
+
+* Piso actual.
+* Movimiento del ascensor.
+* Pasajeros esperando.
+* Pasajeros transportados.
+* Acción seleccionada.
+
+La visualización facilita verificar que el agente realmente está aplicando la política aprendida.
+
+---
+
+## 15. Resultados esperados
+
+Después del entrenamiento el agente debería:
+
+* Transportar más pasajeros.
+* Reducir los tiempos de espera.
+* Evitar movimientos inválidos.
+* Utilizar rutas más eficientes.
+
+Las gráficas obtenidas muestran la evolución del aprendizaje a lo largo de los episodios y permiten validar el comportamiento aprendido.
